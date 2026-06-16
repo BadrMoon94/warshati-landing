@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ورشاتي — منصة حجز الصيانة الذكية</title>
+<meta name="description" content="ورشاتي — منصة حجز الصيانة الذكية التي تربطك بأفضل الورش في مدينتك" />
+<meta property="og:title" content="ورشاتي — منصة حجز الصيانة الذكية" />
+<meta property="og:description" content="احجز موعد الصيانة بضغطة زر وتابع حالة حجزك مباشرة" />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Sora:wght@300;400;600;700;800&family=Nunito:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --orange-400: #FFA726;
+  --orange-500: #FF9800;
+  --orange-600: #FB8C00;
+  --orange-700: #F57C00;
+  --orange-800: #E65100;
+  --navy-600:   #1A237E;
+  --navy-700:   #0D1B4B;
+  --navy-800:   #080F2E;
+  --navy-900:   #040820;
+  --success:    #00C853;
+  --white:      #FFFFFF;
+  --grey-100:   #F5F5F5;
+  --grey-300:   #E0E0E0;
+  --grey-500:   #9E9E9E;
+  --grey-700:   #616161;
+  --black:      #0A0A0A;
+  --grad-hero:  linear-gradient(135deg, #0D1B4B 0%, #080F2E 55%, #1a0a00 100%);
+  --grad-orange:linear-gradient(135deg, #FF9800, #E65100);
+  --grad-card:  linear-gradient(160deg, rgba(255,152,0,0.08) 0%, rgba(8,15,46,0.6) 100%);
+  --font-ar:    'Cairo', sans-serif;
+  --font-en:    'Sora', sans-serif;
+  --font-body:  'Nunito', 'Cairo', sans-serif;
+  --radius:     16px;
+  --radius-sm:  10px;
+  --shadow-glow:0 0 40px rgba(255,152,0,0.25);
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ar);
+  background: var(--navy-800);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ─── SCROLLBAR ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy-900); }
+::-webkit-scrollbar-thumb { background: var(--orange-600); border-radius: 3px; }
+
+/* ─── NAV ────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; right: 0; left: 0; z-index: 100;
+  padding: 18px 5%;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.nav.scrolled {
+  background: rgba(4,8,32,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 30px rgba(0,0,0,0.5);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+}
+.nav-logo-icon {
+  width: 42px; height: 42px;
+  background: var(--grad-orange);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 15px rgba(255,152,0,0.4);
+}
+.nav-logo-text {
+  font-family: var(--font-ar);
+  font-weight: 900;
+  font-size: 1.4rem;
+  background: var(--grad-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links {
+  display: flex; gap: 32px; align-items: center;
+  list-style: none;
+  font-family: var(--font-ar);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.75);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--orange-400); }
+.nav-cta {
+  background: var(--grad-orange);
+  color: #fff !important;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 20px rgba(255,152,0,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(255,152,0,0.5);
+}
+.nav-menu-btn {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  flex-direction: column; gap: 5px;
+}
+.nav-menu-btn span {
+  display: block; width: 26px; height: 2px;
+  background: var(--white); border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* ─── HERO ───────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--grad-hero);
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 120px 5% 80px;
+}
+
+/* Animated background grid */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,152,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,152,0,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridShift 20s linear infinite;
+}
+@keyframes gridShift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
+
+/* Glowing orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orbPulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,152,0,0.18), transparent 70%);
+  bottom: -100px; left: -100px;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(26,35,126,0.4), transparent 70%);
+  top: -80px; right: -80px;
+  animation-delay: -3s;
+}
+.orb-3 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,167,38,0.12), transparent 70%);
+  top: 40%; right: 20%;
+  animation-delay: -1.5s;
+}
+@keyframes orbPulse {
+  0%   { transform: scale(1) translate(0,0); opacity: 0.6; }
+  100% { transform: scale(1.2) translate(20px, -20px); opacity: 1; }
+}
+
+/* Floating sparks */
+.sparks { position: absolute; inset: 0; pointer-events: none; }
+.spark {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: var(--orange-400);
+  border-radius: 50%;
+  animation: sparkFloat linear infinite;
+  opacity: 0;
+}
+@keyframes sparkFloat {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-120px) translateX(30px); opacity: 0; }
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.hero-content {}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,152,0,0.12);
+  border: 1px solid rgba(255,152,0,0.3);
+  color: var(--orange-400);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  animation: fadeInDown 0.6s ease both;
+}
+.hero-badge-dot {
+  width: 8px; height: 8px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+.hero-title {
+  font-family: var(--font-ar);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 20px;
+  animation: fadeInDown 0.6s 0.1s ease both;
+}
+.hero-title .accent {
+  background: var(--grad-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 14px;
+  font-weight: 400;
+  animation: fadeInDown 0.6s 0.2s ease both;
+}
+.hero-trust {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 36px;
+  display: flex; align-items: center; gap: 8px;
+  animation: fadeInDown 0.6s 0.3s ease both;
+}
+.hero-trust svg { color: var(--orange-500); flex-shrink: 0; }
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInDown 0.6s 0.4s ease both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--grad-orange);
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  font-family: var(--font-ar);
+  box-shadow: 0 6px 30px rgba(255,152,0,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(255,152,0,0.55);
+}
+.btn-primary svg { transition: transform 0.2s; }
+.btn-primary:hover svg { transform: translateX(-4px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  padding: 16px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: var(--font-ar);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.btn-ghost:hover {
+  border-color: var(--orange-400);
+  color: var(--orange-400);
+  background: rgba(255,152,0,0.06);
+}
+
+/* Phone mockup */
+.hero-visual {
+  display: flex; justify-content: center; align-items: center;
+  position: relative;
+  animation: fadeInUp 0.8s 0.3s ease both;
+}
+.phone-wrap {
+  position: relative;
+  width: 260px;
+}
+.phone-glow {
+  position: absolute; inset: -30px;
+  background: radial-gradient(ellipse, rgba(255,152,0,0.2) 0%, transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0%   { opacity: 0.6; transform: scale(0.95); }
+  100% { opacity: 1;   transform: scale(1.05); }
+}
+.phone-outer {
+  width: 260px; height: 540px;
+  background: linear-gradient(160deg, #1a1a2e, #16213e);
+  border-radius: 44px;
+  padding: 14px;
+  box-shadow:
+    0 0 0 2px rgba(255,152,0,0.3),
+    0 40px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  position: relative;
+  animation: phoneFloat 4s ease-in-out infinite alternate;
+}
+@keyframes phoneFloat {
+  0%   { transform: translateY(0) rotate(-1deg); }
+  100% { transform: translateY(-16px) rotate(1deg); }
+}
+.phone-notch {
+  width: 90px; height: 28px;
+  background: #0a0a18;
+  border-radius: 0 0 18px 18px;
+  margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+}
+.phone-cam {
+  width: 8px; height: 8px;
+  background: #1a2a4a;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.phone-screen {
+  background: linear-gradient(180deg, #0D1B4B 0%, #080F2E 100%);
+  border-radius: 30px;
+  height: 460px;
+  overflow: hidden;
+  position: relative;
+}
+.ps-header {
+  background: rgba(255,152,0,0.1);
+  border-bottom: 1px solid rgba(255,152,0,0.2);
+  padding: 14px 16px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ps-h-logo {
+  font-family: var(--font-ar);
+  font-weight: 900;
+  font-size: 1rem;
+  background: var(--grad-orange);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ps-h-icon {
+  width: 30px; height: 30px;
+  background: var(--grad-orange);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.ps-body { padding: 14px 12px; }
+.ps-label {
+  font-size: 0.55rem; color: var(--grey-500);
+  margin-bottom: 8px; font-family: var(--font-ar); font-weight: 600;
+}
+.ps-search {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.ps-search-icon { font-size: 11px; opacity: 0.5; }
+.ps-search-text { font-size: 0.55rem; color: rgba(255,255,255,0.4); font-family: var(--font-ar); }
+.ps-cards { display: flex; flex-direction: column; gap: 8px; }
+.ps-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,152,0,0.15);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ps-card-icon {
+  width: 34px; height: 34px; flex-shrink: 0;
+  background: rgba(255,152,0,0.15);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.ps-card-info { flex: 1; min-width: 0; }
+.ps-card-name { font-family: var(--font-ar); font-weight: 700; font-size: 0.55rem; margin-bottom: 3px; }
+.ps-card-meta { font-size: 0.48rem; color: var(--grey-500); }
+.ps-card-stars {
+  display: flex; gap: 1px;
+}
+.ps-star { font-size: 8px; color: var(--orange-500); }
+.ps-book-btn {
+  background: var(--grad-orange);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-family: var(--font-ar); font-weight: 700; font-size: 0.48rem;
+  cursor: default;
+}
+.ps-status {
+  margin-top: 12px;
+  background: rgba(0,200,83,0.08);
+  border: 1px solid rgba(0,200,83,0.2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.ps-status-dot {
+  width: 7px; height: 7px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+.ps-status-text { font-family: var(--font-ar); font-size: 0.5rem; color: var(--success); font-weight: 600; }
+
+/* Floating chips */
+.hero-chip {
+  position: absolute;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50px;
+  padding: 10px 16px;
+  font-size: 0.78rem;
+  font-family: var(--font-ar);
+  font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  animation: chipFloat 5s ease-in-out infinite alternate;
+}
+.chip-1 { top: 60px; right: -20px; animation-delay: 0s; }
+.chip-2 { bottom: 80px; right: -30px; animation-delay: -2s; }
+.chip-3 { top: 180px; left: -40px; animation-delay: -1s; }
+@keyframes chipFloat {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-10px); }
+}
+.chip-icon { font-size: 1.1rem; }
+
+/* ─── STATS ──────────────────────────────────────────── */
+.stats-band {
+  background: rgba(255,152,0,0.05);
+  border-top: 1px solid rgba(255,152,0,0.15);
+  border-bottom: 1px solid rgba(255,152,0,0.15);
+  padding: 40px 5%;
+}
+.stats-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.stat-item {
+  text-align: center;
+  padding: 20px;
+}
+.stat-num {
+  font-family: var(--font-en);
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: var(--grad-orange);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-family: var(--font-ar);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+}
+
+/* ─── SECTION COMMON ─────────────────────────────────── */
+.section {
+  padding: 100px 5%;
+}
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-en);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange-500);
+  margin-bottom: 16px;
+}
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--orange-500);
+}
+.section-title {
+  font-family: var(--font-ar);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.section-title .accent {
+  background: var(--grad-orange);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-desc {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.8;
+  max-width: 560px;
+}
+
+/* ─── FEATURES ───────────────────────────────────────── */
+.features-section { background: var(--navy-900); }
+.features-head {
+  text-align: center; margin-bottom: 60px;
+}
+.features-head .section-desc { margin: 0 auto; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.feat-card {
+  background: var(--grad-card);
+  border: 1px solid rgba(255,152,0,0.12);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  cursor: default;
+}
+.feat-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0; left: 0;
+  height: 2px;
+  background: var(--grad-orange);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feat-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,152,0,0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(255,152,0,0.1);
+}
+.feat-card:hover::before { opacity: 1; }
+.feat-num {
+  font-family: var(--font-en);
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: rgba(255,152,0,0.08);
+  position: absolute;
+  top: 16px; left: 24px;
+  line-height: 1;
+  user-select: none;
+}
+.feat-icon {
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+  display: block;
+  position: relative; z-index: 1;
+}
+.feat-title-ar {
+  font-family: var(--font-ar);
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+  position: relative; z-index: 1;
+}
+.feat-title-en {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--orange-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  position: relative; z-index: 1;
+}
+.feat-desc {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  position: relative; z-index: 1;
+}
+
+/* ─── BONUS FEATURES ─────────────────────────────────── */
+.bonus-section { background: var(--navy-800); }
+.bonus-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+.bonus-tag {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-family: var(--font-ar);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.bonus-tag:hover {
+  background: rgba(255,152,0,0.1);
+  border-color: rgba(255,152,0,0.3);
+  color: var(--orange-400);
+}
+.bonus-tag-icon { font-size: 1.1rem; }
+
+/* ─── AUDIENCE ───────────────────────────────────────── */
+.audience-section { background: var(--navy-900); }
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 50px;
+}
+.aud-card {
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s;
+}
+.aud-card:hover { transform: translateY(-5px); }
+.aud-card-1 {
+  background: linear-gradient(160deg, rgba(13,27,75,0.8), rgba(8,15,46,0.9));
+  border: 1px solid rgba(92,107,192,0.3);
+}
+.aud-card-2 {
+  background: linear-gradient(160deg, rgba(25,20,5,0.8), rgba(50,25,0,0.5));
+  border: 1px solid rgba(255,152,0,0.3);
+}
+.aud-card-3 {
+  background: linear-gradient(160deg, rgba(0,30,10,0.8), rgba(0,20,5,0.9));
+  border: 1px solid rgba(0,200,83,0.3);
+}
+.aud-emoji { font-size: 3rem; margin-bottom: 16px; display: block; }
+.aud-title {
+  font-family: var(--font-ar);
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.aud-desc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+}
+
+/* ─── DOWNLOAD ───────────────────────────────────────── */
+.download-section {
+  background: var(--grad-hero);
+  position: relative; overflow: hidden;
+}
+.download-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,152,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,152,0,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.dl-inner {
+  position: relative; z-index: 2;
+  max-width: 800px; margin: 0 auto;
+  text-align: center;
+}
+.dl-title {
+  font-family: var(--font-ar);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.dl-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+.dl-buttons {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.dl-btn-main {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--grad-orange);
+  color: #fff;
+  padding: 18px 36px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: var(--font-ar);
+  box-shadow: 0 8px 40px rgba(255,152,0,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dl-btn-main:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(255,152,0,0.65);
+}
+.dl-btn-icon { font-size: 1.4rem; }
+.dl-meta {
+  display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+}
+.dl-meta-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-ar);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+.dl-meta-item svg { color: var(--success); }
+
+/* QR placeholder */
+.qr-block {
+  margin: 0 auto 30px;
+  width: 130px; height: 130px;
+  background: #fff;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  padding: 8px;
+}
+.qr-inner {
+  width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(0deg, #000 0px, #000 4px, #fff 4px, #fff 8px),
+    repeating-linear-gradient(90deg, #000 0px, #000 4px, #fff 4px, #fff 8px);
+  background-blend-mode: multiply;
+  border-radius: 8px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.qr-inner::after {
+  content: 'QR';
+  font-family: var(--font-en);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(0,0,0,0.3);
+}
+.qr-label {
+  font-family: var(--font-ar);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: -20px;
+  margin-bottom: 30px;
+}
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+footer {
+  background: var(--navy-900);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 48px 5%;
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  gap: 24px;
+}
+.footer-logo-text {
+  font-family: var(--font-ar);
+  font-weight: 900;
+  font-size: 1.3rem;
+  background: var(--grad-orange);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.footer-tagline {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+  font-family: var(--font-ar);
+}
+.footer-links {
+  display: flex; gap: 28px;
+  list-style: none;
+  font-family: var(--font-ar);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.footer-links a {
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--orange-400); }
+.footer-copy {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.3);
+  font-family: var(--font-ar);
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  max-width: 1200px; margin-left: auto; margin-right: auto;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ─── MOBILE NAV OVERLAY ─────────────────────────────── */
+.mobile-nav {
+  display: none;
+  position: fixed; inset: 0; z-index: 99;
+  background: rgba(4,8,32,0.98);
+  backdrop-filter: blur(20px);
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: var(--font-ar);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  transition: color 0.2s;
+}
+.mobile-nav a:hover { color: var(--orange-400); }
+.mobile-nav-close {
+  position: absolute; top: 24px; left: 24px;
+  background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-menu-btn { display: flex; }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero-visual { order: -1; }
+  .hero-trust { justify-content: center; }
+  .hero-actions { justify-content: center; }
+  .hero-badge { justify-content: center; }
+
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .audience-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+
+  .chip-1, .chip-2, .chip-3 { display: none; }
+
+  .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 600px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .phone-outer { width: 220px; height: 460px; }
+  .phone-screen { height: 390px; }
+  .section { padding: 70px 5%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <a href="#features" onclick="closeMobileNav()">المميزات</a>
+  <a href="#about" onclick="closeMobileNav()">عن التطبيق</a>
+  <a href="#download" onclick="closeMobileNav()">تحميل</a>
+  <a href="https://github.com/BadrMoon94/warshati" target="_blank" onclick="closeMobileNav()">GitHub</a>
+  <a href="#download" class="btn-primary" onclick="closeMobileNav()" style="margin-top: 8px;">
+    📲 حمّل التطبيق
+  </a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🔧</div>
+    <span class="nav-logo-text">ورشاتي</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">المميزات</a></li>
+    <li><a href="#about">عن التطبيق</a></li>
+    <li><a href="https://github.com/BadrMoon94/warshati" target="_blank">GitHub ⭐</a></li>
+    <li><a href="#download" class="nav-cta">📲 حمّل التطبيق</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn" onclick="openMobileNav()" aria-label="القائمة">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Background effects -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="sparks" id="sparks"></div>
+
+  <div class="hero-inner">
+    <!-- Content -->
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        متاح الآن للتحميل المجاني
+      </div>
+
+      <h1 class="hero-title">
+        منصة حجز الصيانة<br>
+        <span class="accent">الذكية في الجزائر</span>
+      </h1>
+
+      <p class="hero-sub">
+        ورشاتي تربطك بأفضل الورش في مدينتك —<br>
+        احجز موعد الصيانة بضغطة زر وتابع حالة حجزك مباشرة
+      </p>
+
+      <p class="hero-trust">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        ابحث عن ورش موثوقة بالقرب منك مع تقييمات حقيقية من العملاء
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://github.com/BadrMoon94/warshati/releases/latest/download/app-release.apk"
+           class="btn-primary" download>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          حمّل التطبيق الآن
+        </a>
+        <a href="https://github.com/BadrMoon94/warshati" target="_blank" class="btn-ghost">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          عرض على GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- Phone visual -->
+    <div class="hero-visual">
+      <div class="phone-wrap">
+        <div class="phone-glow"></div>
+        <div class="phone-outer">
+          <div class="phone-notch">
+            <div class="phone-cam"></div>
+            <div class="phone-cam"></div>
+          </div>
+          <div class="phone-screen">
+            <div class="ps-header">
+              <div class="ps-h-logo">ورشاتي</div>
+              <div class="ps-h-icon">🔧</div>
+            </div>
+            <div class="ps-body">
+              <div class="ps-label">الورش القريبة منك</div>
+              <div class="ps-search">
+                <div class="ps-search-icon">🔍</div>
+                <div class="ps-search-text">ابحث عن ورشة...</div>
+              </div>
+              <div class="ps-cards">
+                <div class="ps-card">
+                  <div class="ps-card-icon">🏭</div>
+                  <div class="ps-card-info">
+                    <div class="ps-card-name">ورشة الأمل</div>
+                    <div class="ps-card-stars">
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                      <span class="ps-star">★</span>
+                    </div>
+                    <div class="ps-card-meta">باتنة — 1.2 كم</div>
+                  </div>
+                  <button class="ps-book-btn">احجز</button>
+                </div>
+                <div class="ps-card">
+                  <div class="ps-card-icon">🔩</div>
+                  <div class="ps-card-info">
+                    <div class="ps-card-name">ورشة النور</div>
+                    <div class="ps-card-stars">
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                    </div>
+                    <div class="ps-card-meta">باتنة — 2.4 كم</div>
+                  </div>
+                  <button class="ps-book-btn">احجز</button>
+                </div>
+                <div class="ps-card">
+                  <div class="ps-card-icon">🚗</div>
+                  <div class="ps-card-info">
+                    <div class="ps-card-name">ميكانيكي متنقل</div>
+                    <div class="ps-card-stars">
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                      <span class="ps-star">★</span><span class="ps-star">★</span>
+                      <span class="ps-star">★</span>
+                    </div>
+                    <div class="ps-card-meta">متاح الآن</div>
+                  </div>
+                  <button class="ps-book-btn">اطلب</button>
+                </div>
+              </div>
+              <div class="ps-status">
+                <div class="ps-status-dot"></div>
+                <div class="ps-status-text">حجزك قيد المعالجة...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating chips -->
+        <div class="hero-chip chip-1">
+          <span class="chip-icon">✅</span>
+          <span>تم تأكيد الحجز</span>
+        </div>
+        <div class="hero-chip chip-2">
+          <span class="chip-icon">⭐</span>
+          <span>تقييم 4.9</span>
+        </div>
+        <div class="hero-chip chip-3">
+          <span class="chip-icon">📍</span>
+          <span>1.2 كم منك</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">ورشة مسجلة</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-num">48</div>
+      <div class="stat-label">ولاية مغطاة</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">مستخدم نشط</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-num">4.9</div>
+      <div class="stat-label">متوسط التقييم</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section features-section" id="features">
+  <div class="section-inner">
+    <div class="features-head">
+      <div class="section-tag">المميزات</div>
+      <h2 class="section-title">كل ما تحتاجه<br><span class="accent">في مكان واحد</span></h2>
+      <p class="section-desc">ورشاتي يقدم لك تجربة متكاملة لإدارة صيانة سيارتك بسهولة وأمان</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feat-card reveal">
+        <span class="feat-num">01</span>
+        <span class="feat-icon">🗺️</span>
+        <div class="feat-title-ar">اكتشف الورش</div>
+        <div class="feat-title-en">Workshop Discovery</div>
+        <p class="feat-desc">اعثر على ورش موثوقة بالقرب منك مع شارات التحقق، التقييمات الحقيقية، وعرض الخريطة التفاعلي</p>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-1">
+        <span class="feat-num">02</span>
+        <span class="feat-icon">📅</span>
+        <div class="feat-title-ar">حجز ذكي</div>
+        <div class="feat-title-en">Smart Booking</div>
+        <p class="feat-desc">احجز موعد الصيانة بضغطة واحدة — اختر الخدمة والتاريخ والوقت المناسب لك</p>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-2">
+        <span class="feat-num">03</span>
+        <span class="feat-icon">📡</span>
+        <div class="feat-title-ar">تتبع مباشر</div>
+        <div class="feat-title-en">Real-time Tracking</div>
+        <p class="feat-desc">تابع حالة حجزك لحظة بلحظة: قيد الانتظار ← مقبول ← جاري العمل ← مكتمل</p>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-1">
+        <span class="feat-num">04</span>
+        <span class="feat-icon">🏍️</span>
+        <div class="feat-title-ar">ميكانيكي متنقل</div>
+        <div class="feat-title-en">Mobile Mechanic</div>
+        <p class="feat-desc">اطلب ميكانيكي يأتي إلى موقعك مباشرة — خدمة في الطريق أو في المنزل</p>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-2">
+        <span class="feat-num">05</span>
+        <span class="feat-icon">🚛</span>
+        <div class="feat-title-ar">سحب المركبات</div>
+        <div class="feat-title-en">Vehicle Towing</div>
+        <p class="feat-desc">اطلب خدمة السحب بسرعة وتتبع السائق مباشرة حتى الوصول إليك</p>
+      </div>
+
+      <div class="feat-card reveal reveal-delay-3">
+        <span class="feat-num">06</span>
+        <span class="feat-icon">⭐</span>
+        <div class="feat-title-ar">تقييمات حقيقية</div>
+        <div class="feat-title-en">Reviews & Ratings</div>
+        <p class="feat-desc">اقرأ وشارك تقييمات حقيقية من مستخدمين فعليين — لا تقييمات مزيفة</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BONUS FEATURES -->
+<section class="section bonus-section" id="about">
+  <div class="section-inner">
+    <div>
+      <div class="section-tag">كل شيء</div>
+      <h2 class="section-title reveal">مميزات <span class="accent">إضافية</span> لتجربة أكمل</h2>
+      <p class="section-desc reveal">بالإضافة للمميزات الأساسية، ورشاتي يأتي مكتملاً بكل ما تحتاجه</p>
+    </div>
+    <div class="bonus-grid">
+      <div class="bonus-tag reveal"><span class="bonus-tag-icon">💬</span> دردشة داخلية</div>
+      <div class="bonus-tag reveal reveal-delay-1"><span class="bonus-tag-icon">🚗</span> مرآب السيارات</div>
+      <div class="bonus-tag reveal reveal-delay-2"><span class="bonus-tag-icon">🔔</span> تذكيرات الصيانة</div>
+      <div class="bonus-tag reveal reveal-delay-3"><span class="bonus-tag-icon">🥽</span> أدلة AR تفاعلية</div>
+      <div class="bonus-tag reveal"><span class="bonus-tag-icon">📊</span> لوحة تحكم الورشة</div>
+      <div class="bonus-tag reveal reveal-delay-1"><span class="bonus-tag-icon">🔩</span> بحث قطع الغيار</div>
+      <div class="bonus-tag reveal reveal-delay-2"><span class="bonus-tag-icon">🧾</span> فواتير رقمية</div>
+      <div class="bonus-tag reveal reveal-delay-3"><span class="bonus-tag-icon">🌍</span> العربية / الفرنسية / الإنجليزية</div>
+      <div class="bonus-tag reveal"><span class="bonus-tag-icon">📲</span> إشعارات فورية</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="section audience-section">
+  <div class="section-inner">
+    <div class="features-head">
+      <div class="section-tag">لمن هو</div>
+      <h2 class="section-title reveal">ورشاتي <span class="accent">للجميع</span></h2>
+      <p class="section-desc reveal reveal-delay-1">سواء كنت صاحب سيارة، ميكانيكي، أو صاحب ورشة — ورشاتي صُمِّم من أجلك</p>
+    </div>
+    <div class="audience-grid">
+      <div class="aud-card aud-card-1 reveal">
+        <span class="aud-emoji">🚗</span>
+        <div class="aud-title">أصحاب المركبات</div>
+        <p class="aud-desc">ابحث عن ورش موثوقة، احجز بسهولة، وتابع حالة سيارتك في الوقت الفعلي</p>
+      </div>
+      <div class="aud-card aud-card-2 reveal reveal-delay-1">
+        <span class="aud-emoji">🔧</span>
+        <div class="aud-title">أصحاب الورش</div>
+        <p class="aud-desc">أدر حجوزاتك، عرّف بخدماتك، وابنِ سمعة قوية مع تقييمات العملاء</p>
+      </div>
+      <div class="aud-card aud-card-3 reveal reveal-delay-2">
+        <span class="aud-emoji">🏍️</span>
+        <div class="aud-title">الميكانيكيون المتنقلون</div>
+        <p class="aud-desc">استقبل طلبات من العملاء القريبين وسِّع نطاق عملك في كامل الولاية</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="section download-section" id="download">
+  <div class="dl-inner">
+    <div class="section-tag" style="justify-content: center;">تحميل مجاني</div>
+    <h2 class="dl-title reveal">
+      جاهز لتجربة<br>
+      <span style="background: var(--grad-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">ورشاتي؟</span>
+    </h2>
+    <p class="dl-sub reveal">
+      حمّل التطبيق مجاناً على أجهزة أندرويد وابدأ رحلتك مع أفضل منصة لصيانة السيارات في الجزائر
+    </p>
+
+    <a href="https://BadrMoon94.github.io/warshati-landing/" target="_blank" style="display: block; text-decoration: none;">
+      <div class="qr-block reveal">
+        <div class="qr-inner"></div>
+      </div>
+    </a>
+    <p class="qr-label reveal">امسح الكود لزيارة الموقع</p>
+
+    <div class="dl-buttons reveal">
+      <a href="https://github.com/BadrMoon94/warshati/releases/latest/download/app-release.apk"
+         class="dl-btn-main" download>
+        <span class="dl-btn-icon">📲</span>
+        تحميل APK مباشر
+      </a>
+    </div>
+
+    <div class="dl-meta reveal">
+      <div class="dl-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        مجاني 100%
+      </div>
+      <div class="dl-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        بدون إعلانات
+      </div>
+      <div class="dl-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Android 6.0+
+      </div>
+      <div class="dl-meta-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        مفتوح المصدر
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo-text">ورشاتي</div>
+      <div class="footer-tagline">منصة حجز الصيانة الذكية · الجزائر</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#features">المميزات</a></li>
+      <li><a href="#download">تحميل</a></li>
+      <li><a href="https://github.com/BadrMoon94/warshati" target="_blank">GitHub</a></li>
+      <li><a href="mailto:infobadri8@gmail.com">تواصل معنا</a></li>
+    </ul>
+  </div>
+  <p class="footer-copy">
+    © 2025 ورشاتي · صُنع بـ ❤️ في الجزائر · جميع الحقوق محفوظة
+  </p>
+</footer>
+
+<script>
+// NAV SCROLL
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// MOBILE NAV
+function openMobileNav() {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// SPARKS
+const sparksContainer = document.getElementById('sparks');
+const numSparks = 25;
+for (let i = 0; i < numSparks; i++) {
+  const spark = document.createElement('div');
+  spark.className = 'spark';
+  spark.style.left  = Math.random() * 100 + '%';
+  spark.style.bottom = Math.random() * 40 + '%';
+  spark.style.animationDuration = (3 + Math.random() * 5) + 's';
+  spark.style.animationDelay    = (Math.random() * 6) + 's';
+  spark.style.width  = (2 + Math.random() * 3) + 'px';
+  spark.style.height = spark.style.width;
+  // orange or white sparks
+  spark.style.background = Math.random() > 0.5 ? '#FF9800' : '#ffffff';
+  sparksContainer.appendChild(spark);
+}
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => revealObs.observe(el));
+
+// STAT COUNTER ANIMATION
+function animateCounter(el, target, suffix = '') {
+  const duration = 2000;
+  const start = performance.now();
+  const isDecimal = String(target).includes('.');
+  const update = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = eased * target;
+    el.textContent = (isDecimal ? val.toFixed(1) : Math.floor(val).toLocaleString('ar')) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+const statNums = document.querySelectorAll('.stat-num');
+const statsObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const raw = e.target.dataset.val;
+      const suffix = e.target.dataset.suffix || '';
+      animateCounter(e.target, parseFloat(raw), suffix);
+      statsObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+// Set data attributes for stats
+const statsData = [
+  { val: 500, suffix: '+' },
+  { val: 48,  suffix: '' },
+  { val: 10000, suffix: '+' },
+  { val: 4.9, suffix: '' },
+];
+statNums.forEach((el, i) => {
+  el.dataset.val = statsData[i].val;
+  el.dataset.suffix = statsData[i].suffix;
+  el.textContent = '0';
+  statsObs.observe(el);
+});
+</script>
+</body>
+</html>
